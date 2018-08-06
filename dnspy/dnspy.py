@@ -27,7 +27,7 @@
 
 import sys
 import argparse
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from contextlib import closing
 
 
@@ -56,13 +56,13 @@ class Dnspy:
             Returns:
         """
 
-        with closing(urllib2.urlopen(etld_url)) as inf:
+        with closing(urllib.request.urlopen(etld_url)) as inf:
             for line in inf:
                 # Ignore comments and whitespace lines
                 if ((line[:2] == '//') or (line[0] == '\n')):
                     continue
 
-                line = unicode(line.strip(), 'utf-8')
+                line = str(line.strip(), 'utf-8')
                 line = line.strip()
 
                 if line[0] == '*':
@@ -94,8 +94,8 @@ class Dnspy:
                 Effective top-level domain [string]
         """
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
+            domain = str(domain, 'utf-8')
+        if type(domain) == str:
             domain = domain.encode('idna')
 
         dlabels = domain.strip().split('.')
@@ -133,8 +133,8 @@ class Dnspy:
             return []
 
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
+            domain = str(domain, 'utf-8')
+        if type(domain) == str:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
@@ -169,8 +169,8 @@ class Dnspy:
             return []
 
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
+            domain = str(domain, 'utf-8')
+        if type(domain) == str:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
@@ -217,9 +217,9 @@ def main(argv=sys.argv):
     args = parser.parse_args()
     dpy = Dnspy()
 
-    print str(dpy.subdoms(args.qname))
-    print str(dpy.domlabels(args.qname))
-    print str(dpy.subdom_count(args.qname))
+    print(str(dpy.subdoms(args.qname)))
+    print(str(dpy.domlabels(args.qname)))
+    print(str(dpy.subdom_count(args.qname)))
 
 
 if __name__ == "__main__":
