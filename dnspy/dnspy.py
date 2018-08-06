@@ -27,7 +27,7 @@
 
 import sys
 import argparse
-import urllib.request, urllib.error, urllib.parse
+import urllib3
 from contextlib import closing
 
 
@@ -56,13 +56,13 @@ class Dnspy:
             Returns:
         """
 
-        with closing(urllib.request.urlopen(etld_url)) as inf:
+        with open(etld_url, encoding='utf-8') as inf:
             for line in inf:
                 # Ignore comments and whitespace lines
                 if ((line[:2] == '//') or (line[0] == '\n')):
                     continue
 
-                line = str(line.strip(), 'utf-8')
+#                line = unicode(line.strip(), 'utf-8')
                 line = line.strip()
 
                 if line[0] == '*':
@@ -70,7 +70,7 @@ class Dnspy:
                     etld_ = line[2:].encode('idna')
                     if etld_ not in self.etlds:
                         self.etlds[etld_] = set()
-                    self.etlds[line[2:]].add('*')
+                    self.etlds[etld_].add('*')
                 elif line[0] == '!':
                     # Exceptions to the wildcard rule
                     lbls = line.split('.')
@@ -94,8 +94,8 @@ class Dnspy:
                 Effective top-level domain [string]
         """
         if type(domain) == str:
-            domain = str(domain, 'utf-8')
-        if type(domain) == str:
+            domain = unicode(domain, 'utf-8')
+        if type(domain) == unicode:
             domain = domain.encode('idna')
 
         dlabels = domain.strip().split('.')
@@ -133,8 +133,8 @@ class Dnspy:
             return []
 
         if type(domain) == str:
-            domain = str(domain, 'utf-8')
-        if type(domain) == str:
+            domain = unicode(domain, 'utf-8')
+        if type(domain) == unicode:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
@@ -169,8 +169,8 @@ class Dnspy:
             return []
 
         if type(domain) == str:
-            domain = str(domain, 'utf-8')
-        if type(domain) == str:
+            domain = unicode(domain, 'utf-8')
+        if type(domain) == unicode:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
