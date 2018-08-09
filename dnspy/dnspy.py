@@ -93,16 +93,16 @@ class Dnspy:
             Returns:
                 Effective top-level domain [string]
         """
+#        if type(domain) == str:
+#            domain = unicode(domain, 'utf-8')
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
             domain = domain.encode('idna')
 
-        dlabels = domain.strip().split('.')
+        dlabels = domain.strip().split(b'.')
 
         etld = None
         for i in range(len(dlabels)):
-            etld = '.'.join(dlabels[i:])
+            etld = b'.'.join(dlabels[i:])
             if etld in self.etlds:
                 break
             etld = None
@@ -132,14 +132,14 @@ class Dnspy:
         if n == 0:
             return []
 
+#        if type(domain) == str:
+#            domain = unicode(domain, 'utf-8')
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
 
-        dlabels = domain[:-1*(len(etld) + 1)].split('.')
+        dlabels = domain[:-1*(len(etld) + 1)].split(b'.')
         dlabels.reverse()
 
         subdlst = list()
@@ -149,9 +149,9 @@ class Dnspy:
         nsubd = len(dlabels) if n < 0 else min(n - 1, len(dlabels))
         subd = etld
         for i in range(nsubd):
-            if dlabels[i] == '':
+            if dlabels[i] == b'':
                 continue
-            subd = dlabels[i] + '.' + subd
+            subd = dlabels[i] + b'.' + subd
             subdlst.append(subd)
 
         return subdlst
@@ -168,14 +168,14 @@ class Dnspy:
         if n == 0:
             return []
 
+#        if type(domain) == str:
+#            domain = unicode(domain, 'utf-8')
         if type(domain) == str:
-            domain = unicode(domain, 'utf-8')
-        if type(domain) == unicode:
             domain = domain.encode('idna')
 
         etld = self.etld(domain)
 
-        dlabels = domain[:-1*(len(etld) + 1)].split('.')
+        dlabels = domain[:-1*(len(etld) + 1)].split(b'.')
         dlabels.reverse()
 
         lblst = list()
